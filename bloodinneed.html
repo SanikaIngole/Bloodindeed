@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="mr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>रक्तदाता नोंदणी 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF7ED;--card:#fff;--accent:#FF7043;--muted:#616161;--radius:12px;font-family:Inter,system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#222}
+.container{max-width:900px;margin:24px auto;padding:18px}
+.header{background:linear-gradient(90deg,#ffe0d6,#fff1ea);padding:18px;border-radius:14px;display:flex;gap:12px;align-items:flex-start}
+.title{font-size:20px;font-weight:700;color:#3d2518;margin:0}
+.meta{font-size:13px;color:var(--muted);margin-top:6px}
+.card{background:var(--card);padding:16px;border-radius:12px;margin-top:14px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+.instructions{font-size:14px;color:#333}
+.form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+@media(min-width:760px){.form-grid{grid-template-columns:1fr 1fr}}
+.field{display:flex;flex-direction:column;gap:8px}
+label{font-weight:700;font-size:14px;color:#2a2a2a}
+input,select,textarea{padding:10px;border-radius:10px;border:1px solid #e9e9e9;font-size:14px;background:#fff}
+textarea{min-height:80px;resize:vertical}
+.required{color:#d63a2a;margin-left:6px}
+.actions{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.btn{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn.ghost{background:transparent;border:1px solid rgba(255,112,67,0.16);color:var(--accent)}
+.small{font-size:13px;color:var(--muted)}
+.success{background:#e9f6ea;border-left:4px solid #43a047;padding:10px;border-radius:8px;color:#165c2c;font-weight:600;margin-top:10px}
+.footer{font-size:13px;color:var(--muted);text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<main class="container">
+<header class="header" role="banner" aria-labelledby="formTitle">
+  <div style="flex:1">
+    <h1 class="title" id="formtitle" style="color:red; font-size:22px; text-align:center;">रक्तदान महाकुंभ🩸</h1>
+    <h2 class="title" id="formTitle" style="color:rgb(49, 3, 167); font-size:19px; ">रक्तदाता नोंदणी 2026</h2>
+    <h2 class="title" id="formTitle" style="color:rgb(155, 58, 2); font-size:16px; ">Blood In Need विभाग</h2>
+    <div class="meta">दिनांक: 4 जानेवारी ते 18 जानेवारी 2026</div>
+    <div class="meta">जिल्हा: अमरावती</div>
+  </div>
+  <div style="min-width:150px;text-align:right">
+    <div style="background:#fff;padding:8px;border-radius:10px;font-weight:700;color:#3d2518">नोंदणी फॉर्म</div>
+    <div class="small" style="margin-top:8px">कृपया योग्य माहिती भरा</div>
+  </div>
+</header>
+
+
+<form id="regForm" class="card" autocomplete="off" novalidate>
+  <div class="form-grid">
+    <div class="field">
+      <label for="name">नाव <span class="required">*</span></label>
+      <input id="name" name="name" type="text" required placeholder="आपले पूर्ण नाव">
+    </div>
+    <div class="field">
+      <label for="phone">मोबाईल नंबर <span class="required">*</span></label>
+      <input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" required placeholder="९८XXXXXXXX">
+      <div class="small">10 अंकी मोबाइल नंबर भरा</div>
+    </div>
+    <div class="field">
+      <label for="age">वय <span class="required">*</span></label>
+      <input id="age" name="age" type="text" inputmode="numeric" pattern="\d+" required placeholder="उदा. 20">
+    </div>
+    
+    <div class="field">
+      <label for="taluka">तालुका <span class="required">*</span></label>
+      <select id="taluka" name="taluka" required>
+        <option value="अमरावती">अमरावती</option>
+        <option value="अंजनगाव सुर्जी">अंजनगाव सुर्जी</option>
+        <option value="अचलपूर">अचलपूर</option>
+        <option value="नांदगाव खंडेश्वर">नांदगाव खंडेश्वर</option>
+        <option value="मोर्शी">मोर्शी</option>
+        <option value="वरुड">वरुड</option>
+        <option value="तिवसा">तिवसा</option>
+        <option value="भातकुली">भातकुली</option>
+        <option value="चांदूरबाजार">चांदूरबाजार</option>
+        <option value="दर्यापूर">दर्यापूर</option>
+        <option value="धामणगाव रेल्वे">धामणगाव रेल्वे</option>
+        <option value="चांदूर रेल्वे">चांदूर रेल्वे</option>
+        <option value="धारणी">धारणी</option>
+        <option value="चिखलदरा">चिखलदरा</option>
+        <option value="इतर">इतर</option>
+      </select>
+    </div>
+    <div class="field" style="grid-column:1/-1">
+        <label for="blood_group"> ब्लड ग्रुप <span class="required">*</span></label>
+        <input id="blood_group" name="blood_group" type="text" required placeholder="उदा. A+">
+    </div>
+  </div>
+
+  <div style="margin-top:12px" class="small">
+    काही अडचण असल्यास संपर्क: 9767156821, 9699845635, 8668560527, 8007936964
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn" id="submitBtn">सबमिट</button>
+    <button type="button" class="btn ghost" id="clearBtn">फॉर्म क्लिअर</button>
+  </div>
+
+  <div id="messageArea" aria-live="polite"></div>
+</form>
+
+<footer class="footer">तुम्ही जगा, दुसऱ्याला जगवा — रामानंदाचार्य नरेंद्राचार्यजी</footer>
+
+<template id="modalT">
+  <div class="modal" id="modalRoot" role="dialog" aria-modal="true" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:16px">
+    <div style="background:#fff;border-radius:12px;padding:16px;max-width:720px;width:100%;">
+      <h3 style="margin:0 0 10px 0">नोंदणी तपशील</h3>
+    </div> 
+  </div>
+</template>
+
+<script>
+(function(){
+  const form = document.getElementById('regForm');
+  const msg = document.getElementById('messageArea');
+  const submitBtn = document.getElementById('submitBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  function validate(fd){
+    const name = fd.get('name')?.trim();
+    const phone = fd.get('phone')?.trim();
+    const age = fd.get('age')?.trim();
+    const blood_group = fd.get('blood_group')?.trim(); // changed key (no space)
+
+    if(!name) return 'कृपया नाव भरा.';
+    if(!phone || !/^[0-9]{10}$/.test(phone)) return 'कृपया 10 अंकी वैध मोबाईल नंबर भरा.';
+    if(!age || !/^[0-9]+$/.test(age)) return 'कृपया वय संख्या मध्ये भरा.';
+    if(Number(age) < 18) return 'रक्तदान करण्यासाठी वय किमान 18 वर्ष असणे आवश्यक आहे.';
+    if(!blood_group) return 'कृपया ब्लड ग्रुप टाका.'; // fixed variable
+    return null;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    submitBtn.disabled = true;
+    msg.innerHTML = '';
+
+    const fd = new FormData(form);
+    const err = validate(fd);
+    if(err){
+      msg.innerHTML = `<div class="success" style="background:#fff0f0;border-left-color:#d63a2a;color:#8a2b1f">${err}</div>`;
+      submitBtn.disabled = false;
+      return;
+    }
+
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwx3XaA6k2nzn8H0XYhaXbiMMuqoUkKoYjdIalCOW3End8iFr142BogOwuAlP_w3u4N/exec";
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      body: fd
+    })
+    .then(response => {
+      if(!response.ok) throw new Error('Network response was not ok: ' + response.status);
+      return response.text();
+    })
+    .then(() => {
+      msg.innerHTML = '<div class="success">नोंदणी यशस्वी!</div>';
+      form.reset();
+    })
+    .catch(err => {
+      msg.innerHTML = `<div class="success" style="background:#fff0f0;border-left-color:#d63a2a;color:#8a2b1f">त्रुटी: ${err.message}</div>`;
+      console.error(err);
+    })
+    .finally(()=> { submitBtn.disabled = false; });
+  });
+
+  clearBtn.addEventListener('click', ()=>{ 
+    if(confirm('फॉर्म साफ करायचा आहे का?')) form.reset(); 
+  });
+
+  // phone validation
+  const phoneInput = document.getElementById('phone');
+  phoneInput.addEventListener('input', function(){ 
+    this.value = this.value.replace(/\D/g,'').slice(0,10); 
+  });
+
+})();
+</script>
