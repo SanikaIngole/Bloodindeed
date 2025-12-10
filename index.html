@@ -27,6 +27,7 @@ textarea{min-height:80px;resize:vertical}
 .small{font-size:13px;color:var(--muted)}
 .success{background:#e9f6ea;border-left:4px solid #43a047;padding:10px;border-radius:8px;color:#165c2c;font-weight:600;margin-top:10px}
 .footer{font-size:13px;color:var(--muted);text-align:center;margin-top:18px}
+.err{background:#fff0f0;border-left:4px solid #d63a2a;padding:10px;border-radius:8px;color:#8a2b1f;font-weight:600;margin-top:10px}
 </style>
 </head>
 <body>
@@ -44,7 +45,6 @@ textarea{min-height:80px;resize:vertical}
     <div class="small" style="margin-top:8px">कृपया योग्य माहिती भरा</div>
   </div>
 </header>
-
 
 <form id="regForm" class="card" autocomplete="off" novalidate>
   <div class="form-grid">
@@ -102,14 +102,6 @@ textarea{min-height:80px;resize:vertical}
 
 <footer class="footer">तुम्ही जगा, दुसऱ्याला जगवा — रामानंदाचार्य नरेंद्राचार्यजी</footer>
 
-<template id="modalT">
-  <div class="modal" id="modalRoot" role="dialog" aria-modal="true" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;padding:16px">
-    <div style="background:#fff;border-radius:12px;padding:16px;max-width:720px;width:100%;">
-      <h3 style="margin:0 0 10px 0">नोंदणी तपशील</h3>
-    </div> 
-  </div>
-</template>
-
 <script>
 (function(){
   const form = document.getElementById('regForm');
@@ -117,21 +109,28 @@ textarea{min-height:80px;resize:vertical}
   const submitBtn = document.getElementById('submitBtn');
   const clearBtn = document.getElementById('clearBtn');
 
+  function showError(text){
+    msg.innerHTML = `<div class="err">${text}</div>`;
+  }
+  function showSuccess(text){
+    msg.innerHTML = `<div class="success">${text}</div>`;
+  }
+
   function validate(fd){
     const name = fd.get('name')?.trim();
     const phone = fd.get('phone')?.trim();
     const age = fd.get('age')?.trim();
-    const blood_group = fd.get('blood_group')?.trim(); // changed key (no space)
+    const blood_group = fd.get('blood_group')?.trim();
 
     if(!name) return 'कृपया नाव भरा.';
     if(!phone || !/^[0-9]{10}$/.test(phone)) return 'कृपया 10 अंकी वैध मोबाईल नंबर भरा.';
     if(!age || !/^[0-9]+$/.test(age)) return 'कृपया वय संख्या मध्ये भरा.';
     if(Number(age) < 18) return 'रक्तदान करण्यासाठी वय किमान 18 वर्ष असणे आवश्यक आहे.';
-    if(!blood_group) return 'कृपया ब्लड ग्रुप टाका.'; // fixed variable
+    if(!blood_group) return 'कृपया ब्लड ग्रुप टाका.';
     return null;
   }
 
-  form.addEventListener('submit', function(e){
+  form.addEventListener('submit', async function(e){
     e.preventDefault();
     submitBtn.disabled = true;
     msg.innerHTML = '';
@@ -139,30 +138,61 @@ textarea{min-height:80px;resize:vertical}
     const fd = new FormData(form);
     const err = validate(fd);
     if(err){
-      msg.innerHTML = `<div class="success" style="background:#fff0f0;border-left-color:#d63a2a;color:#8a2b1f">${err}</div>`;
+      showError(err);
       submitBtn.disabled = false;
       return;
     }
 
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwqE0ilV9VwVd5DyKfT9P1BiQCpQ7G4GZE3_On6r8z7MKanoidfQ85FoImOyMd2waW_/exec";
+    // === IMPORTANT: put your correct deployed web app URL here ===
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwq.../exec"; // <-- replace with your exact URL
 
-    fetch(WEB_APP_URL, {
-      method: "POST",
-      body: fd
-    })
-    .then(response => {
-      if(!response.ok) throw new Error('Network response was not ok: ' + response.status);
-      return response.text();
-    })
-    .then(() => {
-      msg.innerHTML = '<div class="success">नोंदणी यशस्वी!</div>';
+    try {
+      // Add a small timeout wrapper for fetch
+      const controller = new AbortController();
+      const timeout = setTimeout(()=> controller.abort(), 15000); // 15s timeout
+
+      const response = await fetch(WEB_APP_URL, {
+        method: "POST",
+        body: fd,
+        mode: "cors",               // request CORS
+        cache: "no-cache",
+        credentials: "omit",
+        signal: controller.signal
+      });
+
+      clearTimeout(timeout);
+
+      // If response is opaque (type === 'opaque') it usually means the server responded but CORS blocked access
+      if(response.type === 'opaque'){
+        // Opaque means no access to response - likely CORS or mode:no-cors used on server or not allowing origin
+        throw new Error('Response opaque — शक्यतो CORS समस्या आहे. सर्व्हर (Google Apps Script) मध्ये Access-Control-Allow-Origin: * सेट करा आणि Web App "Anyone, even anonymous" पर्यायाचा वापर करा.');
+      }
+
+      if(!response.ok){
+        // read text if possible
+        let text = '';
+        try{ text = await response.text(); } catch(e){ text = ''; }
+        throw new Error(`Network response was not ok (status ${response.status}). ${text}`);
+      }
+
+      // success
+      showSuccess('नोंदणी यशस्वी!');
       form.reset();
-    })
-    .catch(err => {
-      msg.innerHTML = `<div class="success" style="background:#fff0f0;border-left-color:#d63a2a;color:#8a2b1f">त्रुटी: ${err.message}</div>`;
-      console.error(err);
-    })
-    .finally(()=> { submitBtn.disabled = false; });
+    } catch (err) {
+      if(err.name === 'AbortError'){
+        showError('सर्व्हर प्रतिसाद वेळेत मिळाला नाही (timeout). कृपया नंतर प्रयत्न करा.');
+      } else {
+        // Improve common guidance about CORS
+        let msgText = err.message || String(err);
+        if(msgText.includes('Failed to fetch') || msgText.includes('NetworkError')){
+          msgText += ' — हे बहुतेकदा CORS किंवा चुकीचा URL/Deploy मुळे होते. खालील निर्देश पहा.';
+        }
+        showError('त्रुटी: ' + msgText);
+        console.error('Submission error:', err);
+      }
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
 
   clearBtn.addEventListener('click', ()=>{ 
@@ -177,4 +207,5 @@ textarea{min-height:80px;resize:vertical}
 
 })();
 </script>
-
+</body>
+</html>
